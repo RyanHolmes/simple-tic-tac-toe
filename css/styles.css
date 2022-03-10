@@ -1,0 +1,52 @@
+@font-face {
+  font-family: Traffolight;
+  src: url("./Traffolight.otf") format("opentype");
+}
+
+body {
+    font-family: "Traffolight";
+}
+
+.main {
+  margin-top: 50px;
+}
+
+#tic-tac-toe-board {
+  display: block;
+  margin: 0 auto;
+}
+
+.x-player-label {
+  color: rgba(231, 76, 60, 1);
+}
+
+.o-player-label {
+  color: rgba(52, 152, 219, 1);
+}
+
+.fa-play {
+  color: rgba(46, 204, 113, 1);
+}
+
+.scoreboard-table {
+  font-weight: bold;
+  width: 100%;
+}
+
+.scoreboard-title {
+  margin-top: 10px;
+}
+
+.game-canvas {
+  padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 510px;
+}
+
+.disable-canvas {
+  cursor: not-allowed;
+  pointer-events: none;
+}

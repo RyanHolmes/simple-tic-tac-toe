@@ -1,0 +1,3 @@
+===== Timelog =====
+(3.5 hours) March 10, 8am-11:30pm -> MVP (board, placing x's and o's, reset board, leaderboard, basic unstylized UI)
+(1.75 hours) March 10, 1:30pm-3:15pm -> prettier leaderboard, bug fixes, icons, code comments, minor refactoring
