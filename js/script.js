@@ -12,21 +12,24 @@ $(document).ready(function() {
         board: [[],[],[]]
     }
 
-    var lineWidth = 12;
-    var gridColour = "#BDC3C7"; //gray
-    var xColour = "#E74C3C"; //red
-    var oColour = "#3498DB"; //blue
-    var gridLength = 3; //3x3 grid
-    var gridLineStart = 10; // gives lines room to be rounded
-
     // canvad setup/variables
     var canvas = document.getElementById('game-board-canvas');
     var context = canvas.getContext('2d');
-    var canvasSize = 510;
-    var xoSize = 100;
-    var tileSize = canvasSize / gridLength;
-    canvas.width = canvasSize;
-    canvas.height = canvasSize;
+
+    var graphics = {
+        canvasSize: 510,
+        xoSize: 100,
+        tileSize: 510/3, // canvasSize/gridLength
+        lineWidth: 12,
+        gridColour: "#BDC3C7", //gray
+        xColour: "#E74C3C", //red
+        oColour: "#3498DB", //blue
+        gridLength: 3, //3x3 grid
+        gridPadding: 10 // gives lines room to be rounded (margins)
+    }
+    
+    canvas.width = graphics.canvasSize;
+    canvas.height = graphics.canvasSize;
 
     // DOM Elements
     var xPlayerTurn = $('#x-player-turn');
@@ -93,14 +96,14 @@ $(document).ready(function() {
     resetBoard();
 
     function addXO (mousePos) {
-        for (var x = 0; x < gridLength; x++) {
-            for (var y = 0; y < gridLength; y++) {
-                var xCord = x * tileSize;
-                var yCord = y * tileSize;
+        for (var x = 0; x < graphics.gridLength; x++) {
+            for (var y = 0; y < graphics.gridLength; y++) {
+                var xCord = x * graphics.tileSize;
+                var yCord = y * graphics.tileSize;
 
                 // if mouse clicked within a tile
-                if ( mousePos.x >= xCord && mousePos.x <= xCord + tileSize &&
-                    mousePos.y >= yCord && mousePos.y <= yCord + tileSize ) {
+                if ( mousePos.x >= xCord && mousePos.x <= xCord + graphics.tileSize &&
+                    mousePos.y >= yCord && mousePos.y <= yCord + graphics.tileSize ) {
                     
                     // no duplicate moves
                     if(gameState.board[x][y] !== "") return;
@@ -127,30 +130,30 @@ $(document).ready(function() {
     }
 
     function drawX (xCord, yCord) {
-        context.strokeStyle = xColour;
+        context.strokeStyle = graphics.xColour;
         context.beginPath();
         
-        var offset = xoSize/2;
+        var offset = graphics.xoSize/2;
         context.moveTo(xCord + offset, yCord + offset);
-        context.lineTo(xCord + tileSize - offset, yCord + tileSize - offset);
+        context.lineTo(xCord + graphics.tileSize - offset, yCord + graphics.tileSize - offset);
 
-        context.moveTo(xCord + offset, yCord + tileSize - offset);
-        context.lineTo(xCord + tileSize - offset, yCord + offset);
+        context.moveTo(xCord + offset, yCord + graphics.tileSize - offset);
+        context.lineTo(xCord + graphics.tileSize - offset, yCord + offset);
         
         context.stroke();
         gameState.movesMade++;
     }
 
     function drawO (xCord, yCord) {
-        var halfTileSize = (0.5 * tileSize);
+        var halfTileSize = (0.5 * graphics.tileSize);
         var centerX = xCord + halfTileSize;
         var centerY = yCord + halfTileSize;
-        var radius = (xoSize / 2) - lineWidth;
+        var radius = (graphics.xoSize / 2) - graphics.lineWidth;
         var startAngle = 0; 
         var endAngle = 2 * Math.PI; // 2*pi*r
 
-        context.lineWidth = lineWidth;
-        context.strokeStyle = oColour;
+        context.lineWidth = graphics.lineWidth;
+        context.strokeStyle = graphics.oColour;
         context.beginPath();
         context.arc(centerX, centerY, radius, startAngle, endAngle);
         
@@ -159,23 +162,22 @@ $(document).ready(function() {
     }
 
     function drawGrid () {
-        var lineStart = gridLineStart;
-        var lineLength = canvasSize - (gridLineStart *2 );
-        context.lineWidth = lineWidth;
+        var lineLength = graphics.canvasSize - (graphics.gridPadding * 2);
+        context.lineWidth = graphics.lineWidth;
         context.lineCap = 'round';
-        context.strokeStyle = gridColour;
+        context.strokeStyle = graphics.gridColour;
         context.beginPath();
 
         // 2 Horizontal lines 
         for (var y = 1; y <= 2; y++) {  
-            context.moveTo(lineStart, y * tileSize);
-            context.lineTo(lineLength, y * tileSize);
+            context.moveTo(graphics.gridPadding, y * graphics.tileSize);
+            context.lineTo(lineLength, y * graphics.tileSize);
         }
 
         // 2 Vertical lines 
         for (var x = 1; x <= 2; x++) {
-            context.moveTo(x * tileSize, lineStart);
-            context.lineTo(x * tileSize, lineLength);
+            context.moveTo(x * graphics.tileSize, graphics.gridPadding);
+            context.lineTo(x * graphics.tileSize, lineLength);
         }
 
         context.stroke();
@@ -194,7 +196,7 @@ $(document).ready(function() {
 
     function checkForWinner () {
         // check for vertical winner
-        for(var i = 0; i < gridLength; i++) {
+        for(var i = 0; i < graphics.gridLength; i++) {
             var empty = (gameState.board[i][0] === "" || gameState.board[i][1] === "" || gameState.board[i][2] === "" );
             if( !empty && (gameState.board[i][0] === gameState.board[i][1]) && (gameState.board[i][0] === gameState.board[i][2]) ) {
                 updateScores(gameState.board[i][0]);
@@ -204,7 +206,7 @@ $(document).ready(function() {
         }
 
         // check for horizontal winner
-        for(var i = 0; i < gridLength; i++) {
+        for(var i = 0; i < graphics.gridLength; i++) {
             var empty = (gameState.board[0][i] === "" || gameState.board[1][i] === "" || gameState.board[2][i] === "" );
             if( !empty && (gameState.board[0][i] === gameState.board[1][i]) && (gameState.board[0][i] === gameState.board[2][i]) ) {
                 updateScores(gameState.board[0][i]);
