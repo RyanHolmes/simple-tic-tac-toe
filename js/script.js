@@ -108,8 +108,6 @@ $(document).ready(function() {
                     // switch player turn
                     gameState.bFirstPlayer = (gameState.bFirstPlayer) ? false : true;
 
-                    clearBoard(xCord, yCord);
-
                     if (gameState.bFirstPlayer) {
                         drawX(xCord, yCord);
                         gameState.board[x][y] = "X";
@@ -181,11 +179,6 @@ $(document).ready(function() {
         }
 
         context.stroke();
-    }
-
-    function clearBoard (xCord, yCord) {
-        context.fillStyle = "#fff";
-        context.fillRect(xCord, yCord, tileSize, tileSize); 
     }
 
     drawGrid();
